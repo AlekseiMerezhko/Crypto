@@ -12,7 +12,23 @@ import ForOFor from './pages/404';
 import logo from './logo.svg';
 import './App.css';
 
-const App = () => (
+class App extends Component{
+  state = {
+    coinsList: [],
+  };
+
+  filterListById = (list, id) => (
+    list.find(coin => coin.Id === id)
+  );
+
+   componentDidMount() {
+     fetch('https://min-api.cryptocompare.com/data/all/coinlist')
+       .then(responce => responce.json())
+       .then(responce => this.setState({ coinsList: Object.keys(responce.Data).slice(0, 10).map(key => responce.Data[key]) }))
+       .catch(err => alert(err));
+   }
+  render(){
+  return(
   <BrowserRouter>
     <div className="App">
      <header>
@@ -48,7 +64,8 @@ const App = () => (
       </Switch>
     </div>
   </BrowserRouter>
-);
+  )}
+};
 
 App.displayName = 'App';
 

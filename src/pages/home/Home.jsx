@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
+import CoinInfo from './CoinInfo';
 
-const Home = () => (
-  <div>
-    Home
+class Home extends  Component {
+
+render(){
+  return(
+  <div className="symbolPrice">
+    <CoinInfo/>
   </div>
-);
+  )}
+}
+
 
 export default Home;
