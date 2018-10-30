@@ -1,76 +1,72 @@
 import React, { Component } from 'react';
-import coinsData from '../../coinsList.json'
-//{
-// const obj = {
-//     BTC: {
-//      USD: 6545.18,
-//      EUR: 5654.83
-//   },
-//     ETH: {
-//      USD: 204.91,
-//      EUR: 177.84
-//   }
-// }
-
-const qwe = Object.keys(coinsData.Data).slice(9, 20).map(key => coinsData.Data[key])
-console.log(qwe)
+//import coinsData from '../../coinsList.json';
+import Select from './Select';
+import Button from './Button';
+import CreateInputAndInfo from './CreateInputAndInfo'
 
 class CoinSelect extends Component {
   state = {
-    //coinsData,
-    //coinsList: [],
-    coins:[ {
-        name: 'BTC',
-        USD: 6545.18,
-        EUR: 5654.83,
-        id: 0
-      },
-      {
-        name: 'ETH',
-        USD: 204.91,
-        EUR: 177.84,
-        id: 1
-    }
-    ],
-    inputValue: 1,
-    selectValue: 'BTC',
+    inputValues: Object.keys(this.props.coinsList).map(key => this.props.coinsList[key]).map(elem => { return {name: elem.name, value:1}}),
+    arrayOfCoins: Object.keys(this.props.coinsList).map(key => this.props.coinsList[key]),
+    arrayOfCurrency: [{id:0,name:`USD`},{id:1,name:`EUR`}],
+    selectedCoin: 'Bitcoin',
+    selectedCurrency: 'USD', 
+    arrayOfCoinComponents: ['Bitcoin'],
+    arrayOfCurrencyComponent: ['USD'],
+    btnClick: 0
   };
-  handleInputChange = e => {
-      console.log(typeof e.target.value)
-      this.setState({ inputValue:  e.target.value })      
+
+  handleSelectedCoinChange = e => {
+    this.setState({selectedCoin: e.target.value});
   }
-
-  handleSelectChange = (e) => {
-     console.log(typeof e.target.value);
-     this.setState({ selectValue: e.target.value })
-   }
-  //componentDidMount = () => {
-  //  this.setState({ coinsList: Object.keys(coinsData.Data).slice(9, 20).map(key => coinsData.Data[key]) })
-  //}
-
+  handleSelectedCurrencyChange = e => {
+    this.setState({selectedCurrency: e.target.value})
+  }
+  handleAddCoinClick = e => {
+    e.preventDefault();
+    if(this.state.arrayOfCoinComponents.includes(this.state.selectedCoin)){
+      return
+    }
+    this.state.arrayOfCoinComponents.push(this.state.selectedCoin);
+    this.setState({btnClick: +1})        
+  }
+  handleDeleteCoin = (e) =>{
+    const index = this.state.arrayOfCoinComponents.findIndex(param => param === e.target.className);
+    this.setState({arrayOfCoinComponents: [this.state.arrayOfCoinComponents.slice(0,index), this.state.arrayOfCoinComponents.slice(index+1)]})
+    
+  }
+  handleAddCurrencyClick = e => {
+    e.preventDefault();
+    if(this.state.arrayOfCurrencyComponent.includes(this.state.selectedCurrency)){
+      return
+    }
+    this.state.arrayOfCurrencyComponent.push(this.state.selectedCurrency);
+    this.setState({btnClick: +1})         
+  }
+  handleInputChange = e => {  
+      const q = this.state.inputValues.find(elem => elem.name === e.target.name);
+      q.value = +e.target.value;
+      this.setState({btnClick: +1});
+  }
   render(){
-    const usd = this.state.coins.find(param => param.name === this.state.selectValue).USD;
-    const eur = this.state.coins.find(param => param.name === this.state.selectValue).EUR;
-    console.log(usd, eur)
-
   return(
-  <div className="LeftCoinSelect">
-    <select onChange={this.handleSelectChange}>
-      {this.state.coins.map(coin => (<option value={coin.name}  key={coin.id}>{coin.name}</option>))}
-    </select>
-    <label htmlFor="LeftCoinValue">
-        :
-      <input
-      defaultValue="1"
-      type="text"
-      name="LeftCoinValue"
-      id="LeftCoinValue"
-      placeholder="Value of Crypto" 
-      onChange={this.handleInputChange}
-      />
-    </label>
-    <p>USD:<span className="CoinUsd">{usd * this.state.inputValue}</span></p>
-    <p>EUR:<span className="CoinEur">{eur * this.state.inputValue}</span></p>
+  <div className="CoinSelect">
+    <div className="cryptoMoney">
+      <Select onChange={this.handleSelectedCoinChange} coins={this.state.arrayOfCoins}/>
+      <Button onClick={this.handleAddCoinClick}/>
+      {this.state.arrayOfCoinComponents.map((param,i) => (<p  key={i}> {param} <span key={i}> X </span></p>))}
+    </div>
+
+    <div className="currencyMoney">
+      <Select onChange={this.handleSelectedCurrencyChange} coins={this.state.arrayOfCurrency}/>
+      <Button onClick={this.handleAddCurrencyClick}/>
+      {this.state.arrayOfCurrencyComponent.map((param,i) => (<p key={i} htmlFor={param}> {param} <span key={i}> X </span></p>))}
+    </div>
+    <div className="convertCryptoInCurrency">
+       {this.state.arrayOfCoinComponents.map((coin,i) => (<CreateInputAndInfo inputValues={this.state.inputValues} handleInputChange={this.handleInputChange} key={i} arrayOfCoinComponents={this.state.arrayOfCoinComponents} arrayOfCurrencyComponent={this.state.arrayOfCurrencyComponent} coin={coin} arrayOfCoins={this.state.arrayOfCoins}/>))}
+    </div>
+   
+
   </div>
   )}
 }

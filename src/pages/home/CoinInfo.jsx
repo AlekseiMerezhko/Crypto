@@ -8,7 +8,7 @@ render(){
   return(
   <div>
     CoinInfo
-    <CoinSelect/>   
+    <CoinSelect coinsList={this.props.coinsList}/>   
   </div>
   )}
 }

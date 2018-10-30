@@ -6,7 +6,7 @@ class Home extends  Component {
 render(){
   return(
   <div className="symbolPrice">
-    <CoinInfo/>
+    <CoinInfo coinsList={this.props.coinsList}/>
   </div>
   )}
 }
