@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 //import coinsData from '../../coinsList.json';
 import Select from './Select';
 import Button from './Button';
-import CreateInputAndInfo from './CreateInputAndInfo'
+import CreateInputAndInfo from './CreateInputAndInfo';
+import './style/HomePage.css';
 
 class CoinSelect extends Component {
   state = {
@@ -51,6 +52,7 @@ class CoinSelect extends Component {
   render(){
   return(
   <div className="CoinSelect">
+    <div className="CryptoAndCurrency">
     <div className="cryptoMoney">
       <Select onChange={this.handleSelectedCoinChange} coins={this.state.arrayOfCoins}/>
       <Button onClick={this.handleAddCoinClick}/>
@@ -61,6 +63,8 @@ class CoinSelect extends Component {
       <Select onChange={this.handleSelectedCurrencyChange} coins={this.state.arrayOfCurrency}/>
       <Button onClick={this.handleAddCurrencyClick}/>
       {this.state.arrayOfCurrencyComponent.map((param,i) => (<p key={i} htmlFor={param}> {param} <span key={i}> X </span></p>))}
+    </div>
+
     </div>
     <div className="convertCryptoInCurrency">
        {this.state.arrayOfCoinComponents.map((coin,i) => (<CreateInputAndInfo inputValues={this.state.inputValues} handleInputChange={this.handleInputChange} key={i} arrayOfCoinComponents={this.state.arrayOfCoinComponents} arrayOfCurrencyComponent={this.state.arrayOfCurrencyComponent} coin={coin} arrayOfCoins={this.state.arrayOfCoins}/>))}

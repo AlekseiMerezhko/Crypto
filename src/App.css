@@ -32,7 +32,9 @@ a{
   text-decoration: none;
 }
 a:hover{
+  border-bottom: 2px solid #61dafb;
   color: hsla(0,0%,100%,0.75);
+
 }
 a.active:hover{
   color: black;

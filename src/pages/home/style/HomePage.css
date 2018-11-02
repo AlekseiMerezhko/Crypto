@@ -1,0 +1,54 @@
+.CryptoAndCurrency{
+  display: flex;
+}
+.CoinSelect{
+width: 1280px;
+margin: 0 auto;
+}
+.cryptoMoney{
+  margin: 25px;
+}
+.cryptoMoney p{
+  font-size: 14px;
+}
+.cryptoMoney span{
+  font-size: 18px;
+  color: red;
+}
+.currencyMoney p{
+  font-size: 14px;
+}
+.cryptoMoney p:hover{
+  cursor: default;
+}
+.cryptoMoney span:hover{
+  cursor: pointer;
+}
+.currencyMoney p:hover{
+  cursor: default;
+}
+.currencyMoney span{
+  font-size: 18px;
+  color: red;
+}
+.currencyMoney span:hover{
+  cursor: pointer;
+}
+.currencyMoney{
+  margin: 25px;
+}
+.convertCryptoInCurrency{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+.CreateInputAndInfo{
+    width: 33%;
+}
+.CreateInputAndInfo p{
+    font-size: 18px;
+}
+.CreateInputAndInfo span{
+    font-size: 20px;
+}

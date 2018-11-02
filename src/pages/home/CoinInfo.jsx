@@ -7,7 +7,6 @@ class CoinInfo extends Component {
 render(){
   return(
   <div>
-    CoinInfo
     <CoinSelect coinsList={this.props.coinsList}/>   
   </div>
   )}

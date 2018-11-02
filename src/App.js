@@ -318,7 +318,7 @@ error: null
   // );
 
   // componentDidMount() {
-  //   fetch('https://api.coinmarketcap.com/v2/ticker/')
+  //   fetch('https://api.coinmarketcap.com/v2/ticker/?convert=EUR&limit=10')
   //     .then(responce => responce.json())
   //     .then(responce => this.setState({ coinsList: responce}))
   //     .catch(err => alert(err));

@@ -1,0 +1,22 @@
+
+
+select > option {
+    background-color: transparent;
+    border: 0;
+    padding-right: 15px;
+    height: 31px;
+    width: 220px;
+}
+
+select {
+    width: 160px;
+    height: 34px;
+    color: black;
+    font-size: 16px;
+    line-height: 2.5;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #61dafb;
+    outline: none;
+
+}

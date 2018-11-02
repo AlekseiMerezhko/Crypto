@@ -4,7 +4,7 @@ import ConverPriceFromInput from './ConverPriceFromInput';
 
 
 const CreateInputAndInfo = ({inputValues, handleInputChange, arrayOfCoinComponents, arrayOfCurrencyComponent, coin, arrayOfCoins}) => (
-    <div>
+    <div className="CreateInputAndInfo">
       <Input  handleInputChange={handleInputChange} coin={coin}/>
       <ConverPriceFromInput inputValues={inputValues} coin={coin} arrayOfCoinComponents={arrayOfCoinComponents} arrayOfCurrencyComponent={arrayOfCurrencyComponent}
        arrayOfCoins={arrayOfCoins}/>

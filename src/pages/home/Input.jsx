@@ -1,4 +1,5 @@
 import React from 'react';
+import './style/HomePageInput.css';
 
 const Input = ({handleInputChange, coin}) => (
   <div>
@@ -9,7 +10,7 @@ const Input = ({handleInputChange, coin}) => (
       type="text"
       name={coin}
       id={coin}
-      placeholder="Value of Crypto" 
+      placeholder={coin} 
       />
   </div>
 );

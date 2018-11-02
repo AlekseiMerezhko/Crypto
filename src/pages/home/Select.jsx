@@ -1,4 +1,5 @@
 import React from 'react';
+import './style/HomePageSelect.css';
 
 const Select = ({ coins, onChange }) => (
     <select onChange={onChange}>
