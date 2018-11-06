@@ -8,7 +8,7 @@ Styles for Header Menu
 header{
   padding-top: 12px;
   padding-bottom: 12px;
- background-color: #24292e;
+  background-color: #24292e;
   display: flex;
   justify-content: space-around;
 }
@@ -45,3 +45,22 @@ li{
   font-size: 1.6em;
 }
 
+@media screen and (max-width: 668px) {
+      header .App-logo{
+       margin: 0 auto;
+      }
+      header{
+        text-align: center;
+        flex-direction: column;
+      }
+      ul{
+        padding: 0;
+        margin: 0;
+        flex-direction: column;
+      }
+      li{
+        padding: 0;
+        margin: 5px;
+      }
+     
+}
