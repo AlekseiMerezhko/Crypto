@@ -1,8 +1,10 @@
 import React from 'react';
+import TopListInfo from './TopListInfo';
+import './Converter.css';
 
-const Converter = () => (
+const Converter = ({coinsPrice}) => (
   <div>
-    Converter
+    <TopListInfo coinsPrice={coinsPrice}/>
   </div>
 );
 

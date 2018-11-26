@@ -1,8 +1,9 @@
 import React from 'react';
-
-const History = () => (
+import DataChart from './DataChart';
+import './History.css';
+const History = ({data}) => (
   <div>
-    History
+    <DataChart data={data}/>
   </div>
 );
 
