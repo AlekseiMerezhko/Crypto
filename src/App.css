@@ -2,6 +2,9 @@
   height: 120px;
   width: 120px;
 }
+body{
+  overflow-x: hidden;
+}
 /*
 Styles for Header Menu 
 */
@@ -16,30 +19,30 @@ header img{
   height: 120px;
   width: 120px;
 }
-ul{
+.menu{
   display: flex; 
   padding-left: 10px;
   margin-left: 10px;
 }
-a.active{
+.menu a.active{
   background-color: hsla(0,0%,100%,0.75);;
   border-radius: 25%;
   color: #24292e;
   padding: 5px;
 }
-a{
+.menu a{
   color: white;
   text-decoration: none;
 }
-a:hover{
+.menu a:hover{
   border-bottom: 2px solid #61dafb;
   color: hsla(0,0%,100%,0.75);
 
 }
-a.active:hover{
+.menu a.active:hover{
   color: black;
 }
-li{
+.menu li{
   padding-left: 25px;
   list-style-type: none;
   font-size: 1.6em;

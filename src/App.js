@@ -60,9 +60,10 @@ class App extends Component{
     <div className="App">
      <header>
        <div className="App-logo">
+         
          <img src={logo} alt="Crypto"/>
        </div>
-      <ul>
+      <ul className='menu'>
         <li>
           <NavLink to="/" activeClassName="active" exact>Home</NavLink>
         </li>

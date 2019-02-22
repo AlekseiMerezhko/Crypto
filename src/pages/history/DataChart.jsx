@@ -1,6 +1,7 @@
 
 import React, {Component} from 'react';
 import Chart from 'chart.js';
+import _ from 'lodash';
 
 
 class DataChart extends Component{
