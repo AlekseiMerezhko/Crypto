@@ -16,12 +16,13 @@
     border: 1px solid black;
     
 }
-.active-pagination{
+.pagination li a {
     color: black;
-    border: 1px solid #47b5d3;
-    background-color:  #61dafb;
-    
 }
+.active-pagination {
+    background-color: aquamarine;
+}
+
 .pagination li:hover{
     cursor: pointer;
     
@@ -73,3 +74,4 @@
   }
      
 }
+

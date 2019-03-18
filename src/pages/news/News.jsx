@@ -1,31 +1,44 @@
 import React, {Component} from 'react';
 import NewsCard from './NewsCard';
 import './news.css';
+import '../loader.css'
 import _ from 'lodash';
 import ReactPaginate from 'react-paginate';
 
 
 class News extends Component{
-  state = {
-    news: [],
-    currentPage: 0
+  constructor(props) {
+    super(props)
+    this.mounted = false;
+    this.state = {
+      news: [],
+      currentPage: 0,
+      mounted: false,
+    }
   }
+  
   handlePageClick = (data) => {
     const selected = data.selected;
     this.setState({currentPage: selected})
-    console.log(data);
-    console.log(this.state)
   }
   componentDidMount(){
-    this.setState({news: this.props.news})
+     this.mounted = true;
+     
+     fetch('https://min-api.cryptocompare.com/data/v2/news/?lang=EN')
+      .then(responce => responce.json())  
+      .then(responce => {if(this.mounted === true) this.setState({ news: responce.Data })})
+      .catch(err => alert(err));
+  }
+  componentWillUnmount(){
+    this.mounted = false;
   }
   render(){
   const { news } = this.state;
   const valueOfNews = 8;
   const sortedNews = _.chunk(news, valueOfNews);
-  console.log(sortedNews);
 
   return(
+    news.length > 1 ?
     <div className="newsPage">
       {sortedNews.length > 1 ? sortedNews[this.state.currentPage].map((coin,i) => <NewsCard key={i} coin={coin}/>) : null}
       <ReactPaginate
@@ -42,7 +55,7 @@ class News extends Component{
           activeClassName={'active-pagination'}
          
         />
-    </div>
+    </div> : <div className="lds-dual-ring"></div>
   )
 }
 }

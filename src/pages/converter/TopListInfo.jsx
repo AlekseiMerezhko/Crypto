@@ -1,51 +1,69 @@
-import React , { Component } from 'react';
+import React, { Component } from 'react';
 import TopExchangesBody from './TopExchangesBody';
+import '../loader.css';
+import _ from 'lodash';
+
+class TopListInfo extends Component {
+  mounting = false;
+  state = {
+    coins: [],
+    sort: 'asc',
+    sortedParam: '',
+  }
+  async componentDidMount() {
+    this.mounting = true;
+    fetch('https://min-api.cryptocompare.com/data/top/mktcapfull?limit=100&tsym=USD')
+      .then(responce => responce.json())
+      .then(responce => {
+        if (this.mounting)
+          this.setState({ coins: responce.Data.map(param => {return { ...param.CoinInfo, ...param.RAW.USD} } ) })
+      })
+      //.then( response => { if(this.mounting)this.setState({coinsPrice: response})})
+      .catch(err => alert(err));
+    //this.setState({coinsPrice: this.props.coinsPrice.map(param => param.ConversionInfo)});
+  }
+  componentWillUnmount() {
+    this.mounting = false;
+  }
 
 
-class TopListInfo extends Component{
-state = {
-  coinsPrice: [],
-  isSorted: true,
-}
-componentDidMount(){
-    this.setState({coinsPrice: this.props.coinsPrice.map(param => param.ConversionInfo)});
-}
-handleSortListOnClick = (e) => {
-  const sortValue = e.target.textContent.split(` `).join(``);
-  const value = this.state.isSorted ? 1 : -1 ;
-  const arr = [].concat(this.state.coinsPrice).sort( (a,b) =>{
-   if (a[sortValue] === b[sortValue]) { return 0; }
-    this.setState({isSorted: !this.state.isSorted})
-    return a[sortValue] < b[sortValue] ? 1 * value : -1 * value;
-  });
-  this.setState({coinsPrice: arr});
-  console.log(sortValue);
-  console.log(this.state.coinsPrice)
-  //console.log(`sorted`, this.state.coinsPrice.sort( (a,b) => a[sortValue] > b[sortValue]))
-} 
-render(){
-    const {coinsPrice} = this.state;
-  return(
-      <div className="TopListInfo" >
-          
-        <div className="TopExchangesHead" onClick={this.handleSortListOnClick}>
-          <h4 >Conversion</h4>
-          <h4>Conversion Symbol</h4>
-          <h4>Currency From</h4>
-          <h4>Currency To</h4>
-          <h4>Market</h4>
-          <h4>Supply</h4>
-          <h4>Total Volume 24H</h4>
-          <h4>SubBase</h4>
+  handleSortListOnClick = (param) => {
+
+    const sortedArray = _.orderBy(this.state.coins, param, this.state.sort === 'asc' ? 'desc' : 'asc');
+    this.setState({
+      coins: sortedArray,
+      sort: this.state.sort === 'asc' ? 'desc' : 'asc',
+      sortedParam: param,
+    });
+  }
+  render() {
+    const { coins } = this.state;
+    
+    return (
+      coins.length > 1 ?
+        <div className="TopListInfo">
+          <table className="table  table-striped table-dark">
+            <thead>
+              <tr>
+                <th scope="col" className={this.state.sortedParam ==='FullName' ? 'active-sort' : null} onClick={this.handleSortListOnClick.bind(null, `FullName`)}>Name
+                </th>
+                <th scope="col" className={this.state.sortedParam ==='Algorithm' ? 'active-sort' : null} onClick={this.handleSortListOnClick.bind(null, `Algorithm`)}>Algorithm</th>
+                <th scope="col" className={this.state.sortedParam ==='PRICE' ? 'active-sort' : null}onClick={this.handleSortListOnClick.bind(null, `PRICE`)}>USD</th>
+                <th scope="col" className={this.state.sortedParam ==='LASTMARKET' ? 'active-sort' : null} onClick={this.handleSortListOnClick.bind(null, `LASTMARKET`)}>Last Market</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {
+                coins.map(coin => <TopExchangesBody key={coin.Id}  coin={coin} />)
+              }
+              
+            </tbody>
+          </table>
         </div>
-        {
-           coinsPrice.map((coin,i) => (
-               <TopExchangesBody key={coin.RAW[0]} coinInfo={coin}/>
-           ))
-        }
-      </div> 
-  )
-}
+        : <div className="lds-dual-ring"></div>
+    )
+  }
 }
 
 

@@ -1,73 +1,60 @@
 
-import React, {Component} from 'react';
-import Chart from 'chart.js';
-import _ from 'lodash';
+import React, { Component } from 'react';
+import Select from '../home/Select';
+import '../loader.css';
+import Button from '../home/Button';
+// import _ from 'lodash';
+import CanvasChart from './CanvasChart';
 
-
-class DataChart extends Component{
+class DataChart extends Component {
+    mounted = false;
+    select = React.createRef();
     state = {
-        chartData: this.props.data,
-
+        chartDataDay: [],
+        chartSecondDataDay: [],
+        allCoins: [],
+        allCurrency: ['USD', 'JPY', 'EUR', 'RUB', 'UAH'],
+        currentCurrency: 'USD',
+        coinsForRequest: [`42`],
+        currentCoin: '42',
     }
-    createChart = () => {
-        const ctx = document.getElementById('myChart').getContext('2d');
-        this.chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: this.dateForChart(),
-              datasets: [{
-                label: 'Daily Bitcoin',
-                data: this.state.chartData.map(param => param.high),
-             backgroundColor: [
-                '#61dafb',
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-            ],
-            borderWidth: 1
-        }]
-    },
-            options: {
-                scales: {
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                },
-                title: {
-                    display: true,
-                    text: 'History'
-                }
-            }
-        });
-        return this.chart;
-    };
-
-    
-    dateForChart = () => {
-        const dataTime = this.state.chartData.map(param => param.time) 
-        const labels = dataTime.map((param) => {
-            const fullDate = new Date(param * 1000);
-            const date = fullDate.toLocaleDateString("en-US");
-            return (`${date}`);
-        });
-        return labels;
+    handleChengeSelectedCurrency = (e) => {
+        this.setState({ currentCurrency: e.currentTarget.value });
+    }
+    handleAddCoinClick = e => {
+        e.preventDefault();
+        if (this.state.coinsForRequest.includes(this.select.current.value)) {
+            return
+        }
+        const arr = [].concat(this.state.coinsForRequest, this.select.current.value)
+        this.setState({ coinsForRequest: arr });
     }
 
-    componentDidMount() {
-        this.createChart();
-    }
-    componentWillReceiveProps() {
-        this.chart.update();
+     componentDidMount() {  
+         fetch('https://min-api.cryptocompare.com/data/all/coinlist')
+            .then(resp => resp.json())
+            .then(resp => Object.keys(resp.Data).slice(0, 50))
+            .then(resp => this.setState({ allCoins: resp }));
     }
     componentWillUnmount() {
-        this.chart.destroy();
+        this.mounted = false;
     }
-    render(){
-        return(
+    render() {
+        console.log(this.state)
+        const { coinsForRequest, currentCurrency } = this.state
+        return (
             <div>
-                <canvas id="myChart" width="400" height="400"></canvas>
+                {this.state.allCoins.length > 1 ?
+                    <div>
+                        <Select coins={this.state.allCurrency} onChange={this.handleChengeSelectedCurrency}></Select>
+                        <select ref={this.select}>
+                            {this.state.allCoins.map(coin => (<option value={coin.name || coin} key={coin.id || coin}> {coin.name || coin}</option>))}
+                        </select>
+                        <Button onClick={this.handleAddCoinClick} />
+                    </div>
+                    : <div className="lds-dual-ring"></div>
+                }
+                <CanvasChart coinsForRequest={coinsForRequest} currentCurrency={currentCurrency} ></CanvasChart>
             </div>
         )
     }

@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 import CoinCard from './CoinCard';
 import Input from './Input';
 import './Coins.css';
+import '../loader.css';
 class Coins extends Component{
+  mounted = false;
   state = {
     allCoins: [],
     search: '',
   }
   componentDidMount(){
-    console.log(this.state)
-    console.log(this.props)
-    this.setState({allCoins: this.props.allCoins})
-    //this.setState({ allCoins: Object.keys(this.props.allCoins).slice(0, 10).map(key => this.props.allCoins[key])})
+    this.mounted = true;
+    fetch('https://min-api.cryptocompare.com/data/all/coinlist')
+      .then(response => response.json())  
+      .then(response => {if(this.mounted)this.setState({ allCoins: Object.keys(response.Data).slice(0, 100).map(key => response.Data[key]) })})
+      .catch(err => alert(err));
+      //this.setState({ allCoins: Object.keys(this.props.allCoins).slice(0, 10).map(key => this.props.allCoins[key])})
+  }
+  componentWillUnmount(){
+    this.mounted = false
   }
   handleSearchChange = (search) => {
     this.setState({ search });
@@ -23,17 +30,20 @@ class Coins extends Component{
   render(){
     const { search } = this.state;
     const { allCoins } = this.state;
+
     return(
+      allCoins.length> 1 ?
       <div>
         <div className="allCoinsInput">
           <Input value={search} onChange={this.handleSearchChange} />
         </div>
         <div className="coin-list">
-          {allCoins.length>1 ? this.filterListBySearchTerm(allCoins, search).map(coin => (
+          {this.filterListBySearchTerm(allCoins, search).map(coin => (
             <CoinCard coin={coin} key={coin.Id} />
-          )) : null}
+          ))}
         </div>
       </div>
+      : <div className="lds-dual-ring"></div>
     )}
 }
 

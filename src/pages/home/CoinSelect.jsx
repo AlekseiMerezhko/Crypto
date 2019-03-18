@@ -4,7 +4,8 @@ import Select from './Select';
 import Button from './Button';
 import CreateInputAndInfo from './CreateInputAndInfo';
 import './style/HomePage.css';
-
+import '../loader.css';
+import extraList from '../../coinsList';
 class CoinSelect extends Component {
   state = {
     inputValues:{},
@@ -14,11 +15,26 @@ class CoinSelect extends Component {
     selectedCurrency: 'USD', 
     arrayOfCoinComponents: ['Bitcoin'],
     arrayOfCurrencyComponent: ['USD'],
-    btnClick: 0
+    btnClick: 0,
+    homeError: false,
   };
+
   componentDidMount(){
-    this.setState({inputValues: Object.keys(this.props.coinsList).map(key => this.props.coinsList[key]).map(elem => { return {name: elem.name, value:1}})});
-    this.setState({arrayOfCoins: Object.keys(this.props.coinsList).map(key => this.props.coinsList[key])});
+    fetch('https://api.coinmarketcap.com/v2/ticker/?convert=EUR&limit=10')
+      .then(response => response.json())  
+      .then(response => console.log(response))  
+      .then(response => this.setState({ arrayOfCoins: process.env.REACT_APP_EXTRA_COINS_LIST}))
+      .catch(err => {
+        this.setState({
+           homeError: true,
+           arrayOfCoins: Object.keys(extraList.data).map(key => extraList.data[key]),
+           inputValues: Object.keys(extraList.data).map(key => extraList.data[key]).map(elem => { return {name: elem.name, value:1}})})
+        });
+
+
+
+
+     
   }
   handleSelectedCoinChange = e => {
     this.setState({selectedCoin: e.target.value});
@@ -62,28 +78,51 @@ class CoinSelect extends Component {
       this.setState({btnClick: +1});
   }
   render(){
+    
   return(
-  <div className="CoinSelect">
-    <div className="CryptoAndCurrency">
-    <div className="cryptoMoney">
-      <Select onChange={this.handleSelectedCoinChange} coins={this.state.arrayOfCoins}/>
-      <Button onClick={this.handleAddCoinClick}/>
-      {this.state.arrayOfCoinComponents.map((param) => (<p key={param} > {param} <span className={param} onClick={this.handleDeleteCoin} key={param} > X </span></p>))}
-    </div>
+    
+  this.state.arrayOfCoins.length > 1 ?
+  
+    <div className="CoinSelect">
+      {this.state.homeError ?
+      <h1 className='homeError' style={ {color: "red", fontSize: 14, textAlign: 'center'}}>
+          Server crashed.Just now You are using Extra CoinsList on Home Page.Data can be not correct
+      </h1> : null }
+      
+      <div className="CryptoAndCurrency">
+        <div className="cryptoMoney">
+          <Select onChange={this.handleSelectedCoinChange} coins={this.state.arrayOfCoins}/>
+          <Button onClick={this.handleAddCoinClick}/>
+          {this.state.arrayOfCoinComponents.map((param) => (
+            <p key={param}>
+              {param} 
+              <span className={param} onClick={this.handleDeleteCoin} key={param} > X </span>
+            </p>
+            ))}
+        </div>
 
-    <div className="currencyMoney">
-      <Select onChange={this.handleSelectedCurrencyChange} coins={this.state.arrayOfCurrency}/>
-      <Button onClick={this.handleAddCurrencyClick}/>
-      {this.state.arrayOfCurrencyComponent.map((param) => (<p key={param}> {param} <span className={param} onClick={this.handleDeleteCurrency} key={param}> X </span></p>))}
-    </div>
-
-    </div>
+        <div className="currencyMoney">
+          <Select onChange={this.handleSelectedCurrencyChange} coins={this.state.arrayOfCurrency}/>
+          <Button onClick={this.handleAddCurrencyClick}/>
+          {this.state.arrayOfCurrencyComponent.map((param) => (
+            <p key={param}>
+              {param}
+              <span className={param} onClick={this.handleDeleteCurrency} key={param}> X </span>
+            </p>
+          ))}
+        </div>
+      </div>
     <div className="convertCryptoInCurrency">
-       {this.state.arrayOfCoinComponents.map((coin,i) => (<CreateInputAndInfo inputValues={this.state.inputValues} handleInputChange={this.handleInputChange} key={i} arrayOfCoinComponents={this.state.arrayOfCoinComponents} arrayOfCurrencyComponent={this.state.arrayOfCurrencyComponent} coin={coin} arrayOfCoins={this.state.arrayOfCoins}/>))}
+       {this.state.arrayOfCoinComponents.map((coin,i) => (
+          <CreateInputAndInfo inputValues={this.state.inputValues} handleInputChange={this.handleInputChange}
+            key={i} arrayOfCoinComponents={this.state.arrayOfCoinComponents}
+            arrayOfCurrencyComponent={this.state.arrayOfCurrencyComponent} coin={coin}
+            arrayOfCoins={this.state.arrayOfCoins}/>
+          ))}
     </div>
-   
-
-  </div>
+   </div>
+   :
+  <div className="lds-dual-ring"></div>
   )}
 }
 

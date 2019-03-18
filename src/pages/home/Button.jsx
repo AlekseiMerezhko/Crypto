@@ -4,7 +4,7 @@ import './style/HomePageButton.css'
 
 
 const Button = ({onClick}) => (
-    <button onClick={onClick}>
+    <button className='add-currency_home' onClick={onClick}>
         +Add
     </button>
 );

@@ -1,4 +1,4 @@
-  button {
+.add-currency_home {
    background: -moz-linear-gradient(#D0ECF4, black, #D0ECF4);
    background: -webkit-gradient(linear, 0 0, 0  100%, from(#D0ECF4), to(#D0ECF4), color-stop(0.5, black));
    padding: 3px 7px;
@@ -8,4 +8,7 @@
    -webkit-border-radius: 5px;
    border: 2px solid #666;
    outline: none;
+  }
+  .add-currency_home:hover{
+    cursor: pointer;
   }
